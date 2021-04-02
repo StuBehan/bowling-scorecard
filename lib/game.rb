@@ -8,6 +8,4 @@ class Game
     @frames_total = []
   end
 
-
-
 end
