@@ -1,3 +1,12 @@
 source 'http://rubygems.org'
 
-gem 'rspec'
+group :test do 
+  gem 'rspec'
+  gem 'rubocop'
+  gem 'simplecov'
+  gem 'simplecov-console'
+end
+
+group :production do 
+  gem 'rake'
+end
