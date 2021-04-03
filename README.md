@@ -1,4 +1,4 @@
-# Bowling Scorecard [![Build Status](https://travis-ci.com/StuBehan/bowling-challenge-ruby.svg?branch=main)](https://travis-ci.com/StuBehan/bowling-challenge-ruby)
+# Bowling Scorecard [![Build Status](https://travis-ci.com/StuBehan/bowling-scorecard.svg?branch=main)](https://travis-ci.com/StuBehan/bowling-scorecard)
 
 ## Thought process...
 
