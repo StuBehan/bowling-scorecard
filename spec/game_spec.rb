@@ -24,6 +24,73 @@ describe Game do
     end
   end
 
+  describe 'tenth_frame_extra' do
+    it 'when a full game is played and each bowling frame is a strike' do
+      game = Game.new
+
+      10.times do
+        game.frame(10, 0)
+      end
+      game.tenth_frame_extra(10)
+      game.tenth_frame_extra(10)
+
+      expect(game.frame_counter).to eq(12)
+      expect(game.frames_total.length).to eq(10)
+      expect(game.total).to eq(300)
+    end
+
+    it 'when a full game is played and the last frame is strike, strike, 5' do
+      game = Game.new
+
+      10.times do
+        game.frame(10, 0)
+      end
+      game.tenth_frame_extra(10)
+      game.tenth_frame_extra(5)
+
+      p game.state
+      p game.frames
+      p game.frames_total
+      p game.total
+
+      expect(game.frame_counter).to eq(12)
+      expect(game.frames_total.length).to eq(10)
+      expect(game.total).to eq(295)
+    end
+
+    it 'when a full game is played and the last frame is a spare and extra roll' do
+      game = Game.new
+
+      9.times do
+        game.frame(10, 0)
+      end
+      game.frame(5, 5)
+      game.tenth_frame_extra(6)
+
+      p game.state
+      p game.frames
+      p game.frames_total
+      p game.total
+
+      expect(game.frame_counter).to eq(11)
+      expect(game.frames_total.length).to eq(10)
+      expect(game.total).to eq(271)
+    end
+
+    it 'when a full game is played and tenth frame is an open frame' do
+      game = Game.new
+
+      9.times do
+        game.frame(10, 0)
+      end
+      game.frame(7, 2)
+
+      expect(game.frame_counter).to eq(10)
+      expect(game.frames_total.length).to eq(10)
+      expect(game.total).to eq(265)
+    end
+  end
+
   describe 'frame_ends' do
     it 'increments the frame counter by 1 after each frame is processed' do
       game = Game.new
@@ -54,20 +121,6 @@ describe Game do
 
       expect(game).to receive(:spare)
       game.frame_ends
-    end
-
-    it 'records an entire game, when each bowling frame is a strike' do
-      game = Game.new
-
-      9.times do
-        game.frame(10, 0)
-      end
-
-      p 'this test needs to be elsewhere'
-
-      expect(game.frame_counter).to eq(9)
-      expect(game.frames_total.length).to eq(7)
-      expect(game.total).to eq(210)
     end
   end
 

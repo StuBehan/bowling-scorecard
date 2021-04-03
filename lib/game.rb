@@ -10,7 +10,7 @@ class Game
     @frame_counter = 0
   end
 
-  def frame(bowl1, bowl2)
+  def frame(bowl1, bowl2 = 0)
     if bowl1 == 10
       @state << 'strike'
     elsif bowl1 + bowl2 == 10
@@ -22,14 +22,20 @@ class Game
     frame_ends
   end
 
+  def tenth_frame_extra(bowl1, bowl2 = 0)
+    if @state.last == 'spare' && @frame_counter == 10; frame(bowl1, bowl2); end
+    if @state.last == 'strike' && @frame_counter == 11; frame(bowl1); end
+    if @state.last == 'strike' && @frame_counter == 10; frame(bowl1); end
+  end
+
   def frame_ends
     case state.last
-    when 'strike' 
+    when 'strike'
       strike
     when 'spare'
       spare
     when 'open frame'
-      open_frame
+      @frame_counter >= 10 ? tenth_open_frame : open_frame
     end
     @frame_counter += 1
     total_update
@@ -64,7 +70,16 @@ class Game
     when 'spare'
       @frames_total.push(10 + current_frame(0), current_open_frame)
     else
-      @frames_total << current_open_frame
+      open_frame_score
+    end
+  end
+
+  def tenth_open_frame
+    case prev_condition
+    when 'x2_strike'
+      @frames_total.push(20 + current_frame(0))
+    when 'spare'
+      @frames_total.push(10 + current_frame(0))
     end
   end
 
@@ -77,8 +92,6 @@ class Game
       return 'x1_strike'; end
     if @state[@frame_counter - 1] == 'spare'
       return 'spare'; end
-    # if @state[@frame_counter - 1] == 'open_frame'
-    #   return 'open_frame'; end
   end
 
   def current_frame(bowl)
@@ -92,5 +105,9 @@ class Game
   def total_update
     @total = 0
     @frames_total.each { |frame| @total += frame }
+  end
+
+  def open_frame_score
+    @frames_total << current_open_frame
   end
 end
